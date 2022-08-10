@@ -8,6 +8,7 @@ import {
 import * as React from "react";
 import { PriceTag } from "./PriceTag";
 import { CartProductMeta } from "./CartProductMeta";
+import { useState } from "react";
 
 const QuantitySelect = (props) => {
   return (
@@ -26,16 +27,18 @@ const QuantitySelect = (props) => {
 
 export const CartItem = (props) => {
   const {
-    isGiftWrapping,
-    name,
-    description,
-    quantity,
-    imageUrl,
-    currency,
-    price,
-    onChangeQuantity,
-    onClickDelete,
+    product_id,
+    quantity
   } = props;
+  const [data, setData] = useState({})
+  React.useEffect(() => {
+    fetch(`https://picayune-brindle-porcupine.glitch.me/products/${product_id}`).then(r => r.json()).then(data => {
+      setData(data)
+       
+    })
+  }, [])
+  
+
   return (
     <Flex
       direction={{
@@ -45,10 +48,8 @@ export const CartItem = (props) => {
       justify="space-between"
       align="center">
       <CartProductMeta
-        name={name}
-        description={description}
-        image={imageUrl}
-        isGiftWrapping={isGiftWrapping}
+        data={data}
+        
       />
 
       {/* Desktop */}
@@ -62,13 +63,13 @@ export const CartItem = (props) => {
         <QuantitySelect
           value={quantity}
           onChange={(e) => {
-            onChangeQuantity?.(+e.currentTarget.value);
+            // (+e.currentTarget.value);
           }}
         />
-        <PriceTag price={price} currency={currency} />
+        {/* <PriceTag price={price} currency={"$"} /> */}
         <CloseButton
-          aria-label={`Delete ${name} from cart`}
-          onClick={onClickDelete}
+          // aria-label={`Delete ${title} from cart`}
+          // onClick={onClickDelete}
         />
       </Flex>
 
@@ -88,10 +89,10 @@ export const CartItem = (props) => {
         <QuantitySelect
           value={quantity}
           onChange={(e) => {
-            onChangeQuantity?.(+e.currentTarget.value);
+            // onChangeQuantity?.(+e.currentTarget.value);
           }}
         />
-        <PriceTag price={price} currency={currency} />
+        {/* <PriceTag price={price}  /> */}
       </Flex>
     </Flex>
   );

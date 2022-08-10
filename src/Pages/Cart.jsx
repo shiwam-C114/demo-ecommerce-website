@@ -13,11 +13,14 @@ import { CartOrderSummary } from "../Components/CartOrderSummary";
 
 
 export const Cart = () => {
-    const [CartData, setCartData] = React.useState()
+    const [cartData, setCartData] = React.useState()
     function fetchCart() {
-        fetch("http://localhost:8080/cart").then(r => r.json()).then(data => {
-            setCartData(data)
-        })
+        fetch("https://picayune-brindle-porcupine.glitch.me/cart")
+          .then((r) => r.json())
+          .then((data) => {
+            setCartData(data);
+            console.log(data)
+          });
     }
 
     React.useEffect(() => {
@@ -60,11 +63,11 @@ export const Cart = () => {
         }}
         flex="2">
         <Heading fontSize="2xl" fontWeight="extrabold">
-          Shopping Cart (3 items)
+              Shopping Cart ({cartData?.length} items)
         </Heading>
 
         <Stack spacing="6">
-          {cartData.map((item) => (
+          {cartData?.map((item) => (
             <CartItem key={item.id} {...item} />
           ))}
         </Stack>
